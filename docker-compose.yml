@@ -1,0 +1,40 @@
+version: "3.6"
+
+services:
+  clickhouse-server:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse/zookeeper-servers.xml:/etc/clickhouse-server/conf.d/zookeeper-servers.xml
+      - ./shared/ch-data/clickhouse:/var/lib/clickhouse
+    depends_on:
+      - kafka
+    links: 
+      - kafka
+
+  clickhouse-client:
+    image: yandex/clickhouse-client
+    entrypoint:
+      - /bin/sleep
+    command:
+      - infinity
+
+  kafka:
+    image: wurstmeister/kafka:2.11-1.0.2
+    volumes:
+      - ./shared/ch-data/kafka:/data
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.0.43
+    links: 
+     - zookeeper
+    ports:
+     - 9092:9092
+     - 9094:9094
+
+  zookeeper:
+    image: zookeeper
+    volumes:
+      - ./shared/ch-data/zookeeper:/data
+    ports:
+      - 2181:2181
