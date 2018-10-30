@@ -1,5 +1,8 @@
 # kafka-clickhouse-docker
 
+- kafka version `2.11-1.0.2`
+- ruby-kafka `0.7.3`
+
 ```
 git clone
 cd kafka-clickhouse-docker
