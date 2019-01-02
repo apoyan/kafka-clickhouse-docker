@@ -13,18 +13,18 @@ kafka_producer = kafka.async_producer(delivery_interval: 10)
 # puts kafka.describe_topic("filters")
 
 message = {
-	message: 'value1'
+  message: 'value1'
 }
 
 1.upto(1000) do |i|
-	message = {
-		timestamp: Time.now.to_i,
-		userId: rand(1000),
-		name: "field#{i}",
-		value: "value#{i}",
-		ccPath: "#{i}_controller"
-	}
-	kafka_producer.produce(message.to_json, topic: "filters")
+  message = {
+    timestamp: Time.now.to_i,
+    userId: rand(1000),
+    name: "field#{i}",
+    value: "value#{i}",
+    ccPath: "#{i}_controller"
+  }
+  kafka_producer.produce(message.to_json, topic: "filters")
 end
 
 at_exit { kafka_producer.shutdown }
